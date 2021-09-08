@@ -339,9 +339,9 @@ class FullyConnectedNet(object):
     ############################################################################
     # Replace "pass" statement with your code
     dim = [input_dim] + hidden_dims + [num_classes]
-    for j in range(num_layers):
-      params['W'+str(j+1)] = torch.normal(0,weight_scale,(dim[j],dim[j+1]),device='cpu').to(dtype)
-      params['b'+str(j+1)] = torch.zeros(dim[j+1],device='cpu').to(dtype)
+    for j in range(self.num_layers):
+      self.params['W'+str(j+1)] = torch.normal(0,weight_scale,(dim[j],dim[j+1]),device='cuda').to(dtype)
+      self.params['b'+str(j+1)] = torch.zeros(dim[j+1],device='cuda').to(dtype)
 
 
 
@@ -424,8 +424,6 @@ class FullyConnectedNet(object):
       temp_X = A
       linear_ReLU_cache.append(linear_ReLU_cache__)
       
-
-      
       
     ############################################################################
     #                             END OF YOUR CODE                             #
@@ -481,7 +479,15 @@ def create_solver_instance(data_dict, dtype, device):
   ##############################################################################
   solver = None
   # Replace "pass" statement with your code
-  pass
+  solver = Solver(model, data_dict, optim_config={
+            'learning_rate': 1e0,
+            },
+            print_every=250,
+            lr_decay=0.95,
+            num_epochs=10, 
+            batch_size=100,)
+solver.train()
+print(solver.check_accuracy(data_dict['X_val'],data_dict['y_val']))
   ##############################################################################
   #                             END OF YOUR CODE                               #
   ##############################################################################
@@ -680,6 +686,7 @@ class Dropout(object):
       ###########################################################################
       # Replace "pass" statement with your code
       mask = (torch.rand(*x.shape) < p).to(x.device) / p
+      mask = mask.type(x.dtype)
       out = x * mask 
       ###########################################################################
       #                             END OF YOUR CODE                            #
