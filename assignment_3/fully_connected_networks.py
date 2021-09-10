@@ -486,8 +486,8 @@ def create_solver_instance(data_dict, dtype, device):
             lr_decay=0.95,
             num_epochs=10, 
             batch_size=100,)
-solver.train()
-print(solver.check_accuracy(data_dict['X_val'],data_dict['y_val']))
+  solver.train()
+  print(solver.check_accuracy(data_dict['X_val'],data_dict['y_val']))
   ##############################################################################
   #                             END OF YOUR CODE                               #
   ##############################################################################
